@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarak Antara Dua Titik - Modul Matematika MTs Kelas VII</title>
+    <!-- Memuat font Inter dari Google Fonts (Fallback aman jika offline, akan kembali ke sans-serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Menggunakan Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        islamicGreen: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d', // Primary
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        elegantGold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b', // Primary
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        }
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar untuk tampilan lebih bersih */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #15803d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #166534;
+        }
+
+        /* Styling khusus untuk slider koordinat */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #f59e0b; /* elegantGold-500 */
+            cursor: pointer;
+            margin-top: -8px; /* Offset to center thumb */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #dcfce7; /* islamicGreen-100 */
+            border-radius: 4px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Kelas utilitas untuk menyembunyikan/menampilkan elemen */
+        .hidden-section {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SVG Icon styling */
+        .svg-icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Header Aplikasi -->
+    <header class="bg-islamicGreen-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Ikon Buku Sederhana (SVG) -->
+                <svg class="w-8 h-8 text-elegantGold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight">MPI MatTs: Teorema Pythagoras</h1>
+            </div>
+            <div class="text-sm md:text-base font-medium text-islamicGreen-100 hidden md:block">
+                Fase D (MTs) - Kanwil Kemenag Prov. Gorontalo
+            </div>
+        </div>
+        <!-- Navigasi Menu -->
+        <nav class="bg-islamicGreen-800">
+            <div class="max-w-5xl mx-auto flex overflow-x-auto">
+                <button onclick="showSection('cover')" class="nav-btn px-4 py-3 text-sm font-medium text-white hover:bg-islamicGreen-600 transition-colors border-b-4 border-elegantGold-500" id="nav-cover">Cover</button>
+                <button onclick="showSection('beranda')" class="nav-btn px-4 py-3 text-sm font-medium text-islamicGreen-200 hover:text-white hover:bg-islamicGreen-600 transition-colors border-b-4 border-transparent" id="nav-beranda">Beranda</button>
+                <button onclick="showSection('materi')" class="nav-btn px-4 py-3 text-sm font-medium text-islamicGreen-200 hover:text-white hover:bg-islamicGreen-600 transition-colors border-b-4 border-transparent" id="nav-materi">Eksplorasi Materi</button>
+                <button onclick="showSection('interaktif')" class="nav-btn px-4 py-3 text-sm font-medium text-islamicGreen-200 hover:text-white hover:bg-islamicGreen-600 transition-colors border-b-4 border-transparent" id="nav-interaktif">Simulasi Titik</button>
+                <button onclick="showSection('kuis')" class="nav-btn px-4 py-3 text-sm font-medium text-islamicGreen-200 hover:text-white hover:bg-islamicGreen-600 transition-colors border-b-4 border-transparent" id="nav-kuis">Kuis Evaluasi</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="flex-grow w-full max-w-5xl mx-auto p-4 md:p-6 lg:p-8">
+
+        <!-- SECTION 0: COVER PEMBUKA -->
+        <section id="cover" class="fade-in block">
+            <div class="relative bg-gray-900 rounded-3xl shadow-2xl overflow-hidden border border-islamicGreen-200 min-h-[550px] flex flex-col justify-center items-center text-center p-6 md:p-12">
+                <!-- Latar Belakang Rumus Matematika (Overlay) -->
+                <div class="absolute inset-0 z-0 opacity-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+                <!-- Efek gradien gelap agar teks tetap terbaca dengan jelas -->
+                <div class="absolute inset-0 z-0 bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-black/90"></div>
+                
+                <!-- Konten Cover Utama -->
+                <div class="relative z-10 w-full max-w-3xl mx-auto p-8 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-sm" style="background: rgba(0,0,0,0.3);">
+                    <span class="inline-block bg-elegantGold-500 text-white text-xs md:text-sm font-bold tracking-wider px-4 py-1.5 rounded-full uppercase shadow-md mb-4 border border-elegantGold-400">
+                        Media Pembelajaran Interaktif (MPI)
+                    </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-8 text-white leading-tight drop-shadow-lg">
+                        Teorema Pythagoras:<br>
+                        <span class="text-blue-400">Jarak Antara Dua Titik</span>
+                    </h1>
+                    
+                    <!-- Profil Penyusun -->
+                    <div class="flex flex-col items-center mb-10">
+                        <!-- Foto Profil -->
+                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.6)] overflow-hidden mb-5 bg-white">
+                            <!-- Menggunakan link iili.io yang merupakan direct link CDN dari freeimage.host -->
+                            <img src="https://iili.io/ncTvQXR.jpg" alt="La Ode Karbeni, S.Pd" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e3a8a/ffffff?text=LK';">
+                        </div>
+                        <!-- Identitas Penyusun -->
+                        <h2 class="text-2xl md:text-3xl font-bold text-white drop-shadow-md">La Ode Karbeni, S.Pd</h2>
+                        <p class="text-blue-200 font-medium mt-2 text-lg drop-shadow">Guru matematika pada MTsN 2 Kabupaten Gorontalo</p>
+                    </div>
+
+                    <!-- Tombol Mulai (Warna Biru Kombinasi Hitam) -->
+                    <button onclick="showSection('beranda')" class="bg-gradient-to-r from-blue-600 via-blue-800 to-black hover:from-blue-500 hover:via-blue-700 hover:to-gray-900 text-white font-extrabold py-4 px-14 rounded-full shadow-[0_0_20px_rgba(37,99,235,0.6)] transition-all transform hover:scale-110 border border-blue-400/50 flex items-center justify-center mx-auto text-xl tracking-wide uppercase">
+                        Mulai Belajar
+                        <svg class="w-7 h-7 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: BERANDA -->
+        <section id="beranda" class="hidden-section fade-in">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-islamicGreen-100">
+                <div class="bg-islamicGreen-50 p-6 md:p-10 text-center border-b border-islamicGreen-100">
+                    <h2 class="text-2xl md:text-3xl font-bold text-islamicGreen-800 mb-4">Selamat Datang di Modul Interaktif</h2>
+                    <p class="text-gray-700 text-lg max-w-3xl mx-auto">
+                        Modul ini dirancang untuk membantu peserta didik kelas VII MTs dalam memahami dan mengaplikasikan Teorema Pythagoras, khususnya dalam menghitung jarak antara dua titik pada sistem koordinat Kartesius.
+                    </p>
+                </div>
+                <div class="p-6 md:p-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-elegantGold-500 pl-3">Tujuan Pembelajaran</h3>
+                    <ul class="space-y-3 text-gray-700 ml-2">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-islamicGreen-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Peserta didik dapat menjelaskan konsep dasar Teorema Pythagoras.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-islamicGreen-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Peserta didik dapat menentukan jarak antara dua titik pada bidang koordinat Kartesius.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-islamicGreen-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Peserta didik dapat menyelesaikan masalah kontekstual yang berkaitan dengan jarak dua titik.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-8 text-center">
+                        <button onclick="showSection('materi')" class="bg-islamicGreen-600 hover:bg-islamicGreen-700 text-white font-bold py-2 px-6 rounded-full shadow transition-colors inline-flex items-center">
+                            Lanjut ke Materi
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: EKSPLORASI MATERI -->
+        <section id="materi" class="hidden-section fade-in">
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-islamicGreen-100">
+                <h2 class="text-2xl md:text-3xl font-bold text-islamicGreen-800 mb-6 border-b-2 border-elegantGold-200 pb-3">Eksplorasi Materi</h2>
+                
+                <div class="space-y-6 text-gray-700">
+                    <div>
+                        <h3 class="text-lg font-bold text-islamicGreen-800 mb-3">1. Mengingat Kembali Teorema Pythagoras</h3>
+                        <p class="mb-3 text-justify">
+                            Pada segitiga siku-siku, kuadrat sisi miring (hipotenusa) sama dengan jumlah kuadrat sisi-sisi penyikunya. Jika sisi penyiku adalah <strong>a</strong> dan <strong>b</strong>, serta sisi miring adalah <strong>c</strong>, maka berlaku rumus:
+                        </p>
+                        <div class="bg-islamicGreen-50 p-4 rounded-xl text-center text-xl font-bold font-mono text-islamicGreen-900 border border-islamicGreen-200 w-max mx-auto">
+                            c² = a² + b²
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-islamicGreen-800 mb-3">2. Jarak Antara Dua Titik pada Koordinat</h3>
+                        <p class="mb-3 text-justify">
+                            Misalkan kita memetakan lahan kebun jagung di Kabupaten Gorontalo. Titik pertama (pos pantau) ada di koordinat <strong>A(x₁, y₁)</strong>. Titik kedua (mesin air) ada di <strong>B(x₂, y₂)</strong>.
+                        </p>
+                        <p class="mb-4 text-justify">
+                            Untuk mencari jarak lurus (d) dari A ke B, kita dapat membentuk segitiga siku-siku imajiner dengan menarik garis mendatar sejajar sumbu X, dan garis tegak sejajar sumbu Y.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li>Panjang sisi mendatar (alas segitiga) adalah selisih nilai x: <strong>|x₂ - x₁|</strong></li>
+                                    <li>Panjang sisi tegak (tinggi segitiga) adalah selisih nilai y: <strong>|y₂ - y₁|</strong></li>
+                                    <li>Jarak lurus A ke B adalah sisi miring segitiga siku-siku tersebut.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-elegantGold-50 p-4 rounded-xl border border-elegantGold-200 flex flex-col justify-center items-center">
+                                <span class="text-sm font-semibold text-elegantGold-800 mb-2">Rumus Jarak Dua Titik:</span>
+                                <div class="bg-white px-4 py-3 rounded shadow font-mono text-base md:text-lg text-center font-bold text-islamicGreen-800">
+                                    AB = &radic;<span style="border-top: 1px solid #1f2937;">(x₂ - x₁)² + (y₂ - y₁)²</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 mt-6">
+                        <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Contoh Kasus Gorontalo
+                        </h4>
+                        <p class="text-sm md:text-base text-justify">
+                            Sebuah perahu nelayan di Danau Limboto bertolak dari dermaga di koordinat <strong>(2, 3)</strong> menuju keramba apung di koordinat <strong>(10, 9)</strong>. Satuan dalam kilometer. Berapa jarak lurus yang ditempuh perahu tersebut?
+                        </p>
+                        <div class="mt-3 text-sm font-mono bg-white p-3 rounded border border-blue-100">
+                            x₁ = 2, y₁ = 3 <br>
+                            x₂ = 10, y₂ = 9 <br><br>
+                            Alas = x₂ - x₁ = 10 - 2 = 8 <br>
+                            Tinggi = y₂ - y₁ = 9 - 3 = 6 <br><br>
+                            Jarak² = 8² + 6² = 64 + 36 = 100 <br>
+                            Jarak = &radic;100 = <strong>10 km</strong>.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button onclick="showSection('interaktif')" class="bg-islamicGreen-600 hover:bg-islamicGreen-700 text-white font-bold py-2 px-6 rounded-full shadow transition-colors inline-flex items-center">
+                        Lanjut ke Simulasi
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SIMULASI INTERAKTIF -->
+        <section id="interaktif" class="hidden-section fade-in">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-islamicGreen-100">
+                <div class="bg-islamicGreen-700 p-4 text-white">
+                    <h2 class="text-xl font-bold flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-elegantGold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                        Simulasi Koordinat Interaktif
+                    </h2>
+                    <p class="text-sm text-islamicGreen-100 mt-1">Geser slider di bawah untuk mengubah posisi Titik A dan Titik B pada bidang koordinat, dan amati perubahan jaraknya.</p>
+                </div>
+
+                <div class="p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+                    <!-- Area Canvas -->
+                    <div class="w-full lg:w-2/3 bg-gray-50 rounded-xl border-2 border-gray-200 relative p-2">
+                        <!-- Canvas Container untuk responsive -->
+                        <div class="relative w-full aspect-square md:aspect-[4/3] max-w-full bg-white rounded shadow-sm overflow-hidden" id="canvasContainer">
+                            <canvas id="coordCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Area Kontrol & Feedback -->
+                    <div class="w-full lg:w-1/3 flex flex-col gap-4">
+                        
+                        <!-- Panel Titik A (Merah) -->
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-200 shadow-sm">
+                            <h3 class="font-bold text-red-700 mb-3 border-b border-red-200 pb-1 flex justify-between">
+                                <span>Titik A (x₁, y₁)</span>
+                                <span class="font-mono bg-white px-2 rounded" id="labelA">(2, 3)</span>
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700 flex justify-between">
+                                        <span>Koordinat X₁</span> <span id="valX1" class="font-mono text-red-600">2</span>
+                                    </label>
+                                    <input type="range" id="sliderX1" min="-10" max="10" value="2" step="1" oninput="updateSim()">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700 flex justify-between">
+                                        <span>Koordinat Y₁</span> <span id="valY1" class="font-mono text-red-600">3</span>
+                                    </label>
+                                    <input type="range" id="sliderY1" min="-10" max="10" value="3" step="1" oninput="updateSim()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Titik B (Biru) -->
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm">
+                            <h3 class="font-bold text-blue-700 mb-3 border-b border-blue-200 pb-1 flex justify-between">
+                                <span>Titik B (x₂, y₂)</span>
+                                <span class="font-mono bg-white px-2 rounded" id="labelB">(6, 6)</span>
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700 flex justify-between">
+                                        <span>Koordinat X₂</span> <span id="valX2" class="font-mono text-blue-600">6</span>
+                                    </label>
+                                    <input type="range" id="sliderX2" min="-10" max="10" value="6" step="1" oninput="updateSim()">
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-700 flex justify-between">
+                                        <span>Koordinat Y₂</span> <span id="valY2" class="font-mono text-blue-600">6</span>
+                                    </label>
+                                    <input type="range" id="sliderY2" min="-10" max="10" value="6" step="1" oninput="updateSim()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hasil Kalkulasi Otomatis -->
+                        <div class="bg-islamicGreen-50 p-4 rounded-xl border-2 border-islamicGreen-300 shadow-sm mt-auto">
+                            <h3 class="font-bold text-islamicGreen-800 mb-2">Perhitungan Jarak:</h3>
+                            <div class="text-sm font-mono space-y-1 text-gray-700" id="calcProses">
+                                <!-- Akan diisi javascript -->
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-islamicGreen-200 flex justify-between items-center">
+                                <span class="font-bold text-gray-800">Jarak AB =</span>
+                                <span class="text-xl md:text-2xl font-bold text-elegantGold-600 bg-white px-3 py-1 rounded shadow-inner" id="calcResult">5.00</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: KUIS EVALUASI -->
+        <section id="kuis" class="hidden-section fade-in">
+            <div class="bg-white rounded-2xl shadow-lg border border-islamicGreen-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-elegantGold-500 to-elegantGold-400 p-6 text-white text-center">
+                    <h2 class="text-2xl font-bold mb-2">Tantangan Kuis Formatif</h2>
+                    <p class="text-elegantGold-50">Uji pemahamanmu tentang Jarak Dua Titik.</p>
+                </div>
+                
+                <div class="p-6 md:p-8">
+                    
+                    <!-- Form Identitas Siswa Sebelum Kuis -->
+                    <div id="identitasContainer" class="max-w-md mx-auto bg-gray-50 border-2 border-islamicGreen-200 p-6 rounded-xl shadow-sm mb-6">
+                        <h3 class="text-xl font-bold text-islamicGreen-800 mb-4 text-center">Isi Identitas Dulu Yuk!</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                <input type="text" id="inputNama" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-islamicGreen-500 focus:border-islamicGreen-500 outline-none" placeholder="Masukkan nama kamu">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+                                <select id="inputKelas" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-islamicGreen-500 focus:border-islamicGreen-500 outline-none">
+                                    <option value="">Pilih Kelas...</option>
+                                    <option value="VII A">VII A</option>
+                                    <option value="VII B">VII B</option>
+                                    <option value="VII C">VII C</option>
+                                    <option value="VII D">VII D</option>
+                                </select>
+                            </div>
+                            <button onclick="mulaiKuisDenganIdentitas()" class="w-full bg-islamicGreen-600 hover:bg-islamicGreen-700 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-4">
+                                Mulai Kerjakan
+                            </button>
+                            <p id="identitasError" class="text-red-500 text-sm hidden text-center mt-2 font-medium">Harap isi nama dan kelas terlebih dahulu!</p>
+                        </div>
+                    </div>
+
+                    <!-- Container Kuis Aktif -->
+                    <div id="quizContainer" class="hidden">
+                        <div class="flex justify-between items-center mb-6 text-sm font-semibold text-gray-500">
+                            <span id="quizProgress" class="bg-gray-100 px-3 py-1 rounded-full">Soal 1 dari 5</span>
+                            <span class="text-islamicGreen-600 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                                Skor: <span id="quizScoreDisplay">0</span>
+                            </span>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-100 p-5 rounded-xl mb-6">
+                            <h3 id="questionText" class="text-lg md:text-xl font-medium text-gray-800 leading-relaxed text-justify">
+                                <!-- Teks soal dimuat oleh JS -->
+                            </h3>
+                        </div>
+
+                        <!-- Pilihan Ganda -->
+                        <div id="optionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Tombol opsi dimuat oleh JS -->
+                        </div>
+
+                        <!-- Feedback Dialog (Tersembunyi by default) -->
+                        <div id="feedbackBox" class="mt-6 p-4 rounded-xl hidden">
+                            <div class="flex items-start">
+                                <div id="feedbackIcon" class="mr-3 mt-1"></div>
+                                <div>
+                                    <h4 id="feedbackTitle" class="font-bold mb-1"></h4>
+                                    <p id="feedbackText" class="text-sm md:text-base text-gray-700"></p>
+                                    <div id="pembahasanText" class="mt-3 p-3 bg-white bg-opacity-50 rounded font-mono text-sm border-l-2 border-gray-400"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-right">
+                                <button id="nextBtn" onclick="nextQuestion()" class="bg-islamicGreen-600 hover:bg-islamicGreen-700 text-white font-bold py-2 px-6 rounded-lg transition-colors hidden">Selanjutnya</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layar Hasil Kuis (Tersembunyi by default) -->
+                    <div id="resultContainer" class="hidden text-center py-8">
+                        
+                        <!-- Status Pengiriman Data ke Database -->
+                        <div id="loadingStatus" class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-center hidden">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span>Menyimpan hasil evaluasimu ke database guru...</span>
+                        </div>
+                        <div id="successStatus" class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 hidden font-medium">
+                            ✅ Data berhasil tersimpan! Guru sudah dapat melihat nilaimu.
+                        </div>
+                        <div id="errorStatus" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 hidden font-medium">
+                            ⚠️ Gagal mengirim ke server. Pastikan internetmu aktif. (Skor tetap tercatat di bawah)
+                        </div>
+
+                        <div class="inline-block p-4 rounded-full bg-elegantGold-100 mb-4">
+                            <svg class="w-16 h-16 text-elegantGold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Kuis Selesai!</h2>
+                        <p class="text-lg text-gray-600 mb-6">Kamu telah menyelesaikan tantangan evaluasi formatif.</p>
+                        
+                        <div class="bg-gray-50 border-2 border-gray-200 rounded-2xl p-6 max-w-sm mx-auto mb-8 shadow-inner">
+                            <p class="text-sm text-gray-500 font-medium uppercase tracking-wider mb-1">Skor Akhir</p>
+                            <div class="text-5xl font-black text-islamicGreen-600 mb-2" id="finalScoreText">100</div>
+                            <p id="finalMessage" class="text-sm font-medium text-elegantGold-700">Luar biasa! Pemahamanmu sangat baik.</p>
+                        </div>
+
+                        <button onclick="startQuiz()" class="bg-islamicGreen-600 hover:bg-islamicGreen-700 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105 shadow">
+                            Ulangi Kuis
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm mt-auto">
+        <div class="max-w-5xl mx-auto px-4">
+            <p>&copy; 2026 Modul Interaktif Matematika MTs.</p>
+            <p class="mt-1">Didesain khusus untuk pembelajaran kontekstual di lingkungan Madrasah - Gorontalo.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. SISTEM NAVIGASI TAB
+        // ==========================================
+        function showSection(sectionId) {
+            // Sembunyikan semua section
+            document.querySelectorAll('main > section').forEach(el => {
+                el.classList.add('hidden-section');
+            });
+            // Tampilkan section yang dipilih
+            const target = document.getElementById(sectionId);
+            if(target) {
+                target.classList.remove('hidden-section');
+                // Paksa reflow untuk animasi fade-in
+                void target.offsetWidth;
+                target.classList.add('fade-in');
+            }
+
+            // Update styling navigasi
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('border-elegantGold-500', 'text-white');
+                btn.classList.add('border-transparent', 'text-islamicGreen-200');
+            });
+            
+            const activeBtn = document.getElementById('nav-' + sectionId);
+            if(activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-islamicGreen-200');
+                activeBtn.classList.add('border-elegantGold-500', 'text-white');
+            }
+
+            // Jika membuka tab interaktif, pastikan canvas di-render (penting jika resize terjadi saat tersembunyi)
+            if(sectionId === 'interaktif') {
+                setTimeout(resizeCanvas, 50);
+            }
+        }
+
+        // ==========================================
+        // 2. LOGIKA SIMULASI KANVAS (INTERAKTIF)
+        // ==========================================
+        const canvas = document.getElementById('coordCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvasContainer');
+
+        let gridConfig = {
+            min: -11,
+            max: 11,
+            scale: 0, // Akan dihitung berdasarkan ukuran canvas
+            offsetX: 0,
+            offsetY: 0
+        };
+
+        function resizeCanvas() {
+            // Sesuaikan ukuran canvas internal dengan ukuran aslinya di layar
+            const rect = container.getBoundingClientRect();
+            // Gunakan rasio perangkat untuk ketajaman yang lebih baik
+            const dpr = window.devicePixelRatio || 1;
+            
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            
+            // Normalisasi sistem koordinat untuk retina display
+            ctx.scale(dpr, dpr);
+            
+            canvas.style.width = `${rect.width}px`;
+            canvas.style.height = `${rect.height}px`;
+
+            // Hitung skala berdasarkan ukuran terkecil agar grid selalu muat
+            const range = gridConfig.max - gridConfig.min;
+            gridConfig.scale = Math.min(rect.width, rect.height) / range;
+            
+            gridConfig.offsetX = rect.width / 2;
+            gridConfig.offsetY = rect.height / 2;
+
+            drawSimulation();
+        }
+
+        // Helper fungsi konversi koordinat kartesius (math) ke koordinat pixel canvas
+        function toPixel(mathX, mathY) {
+            return {
+                x: gridConfig.offsetX + (mathX * gridConfig.scale),
+                // Y di canvas terbalik dengan Y matematika
+                y: gridConfig.offsetY - (mathY * gridConfig.scale)
+            };
+        }
+
+        function drawSimulation() {
+            const rect = container.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            // Bersihkan kanvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Ambil nilai dari slider
+            const x1 = parseInt(document.getElementById('sliderX1').value);
+            const y1 = parseInt(document.getElementById('sliderY1').value);
+            const x2 = parseInt(document.getElementById('sliderX2').value);
+            const y2 = parseInt(document.getElementById('sliderY2').value);
+
+            // Update Label teks di UI
+            document.getElementById('valX1').textContent = x1;
+            document.getElementById('valY1').textContent = y1;
+            document.getElementById('labelA').textContent = `(${x1}, ${y1})`;
+            
+            document.getElementById('valX2').textContent = x2;
+            document.getElementById('valY2').textContent = y2;
+            document.getElementById('labelB').textContent = `(${x2}, ${y2})`;
+
+            // --- Gambar Grid ---
+            ctx.lineWidth = 1;
+            
+            for (let i = gridConfig.min + 1; i < gridConfig.max; i++) {
+                // Grid vertikal
+                const px = toPixel(i, 0).x;
+                ctx.beginPath();
+                ctx.strokeStyle = i === 0 ? '#9ca3af' : '#e5e7eb'; // Sumbu Y lebih tebal warnanya
+                ctx.moveTo(px, 0);
+                ctx.lineTo(px, height);
+                ctx.stroke();
+
+                // Grid horizontal
+                const py = toPixel(0, i).y;
+                ctx.beginPath();
+                ctx.strokeStyle = i === 0 ? '#9ca3af' : '#e5e7eb'; // Sumbu X lebih tebal warnanya
+                ctx.moveTo(0, py);
+                ctx.lineTo(width, py);
+                ctx.stroke();
+
+                // Angka pada sumbu (kecuali 0)
+                if (i !== 0 && i % 2 === 0) { // Tampilkan angka kelipatan 2 agar tidak penuh
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText(i, px, toPixel(0, 0).y + 5); // Label X
+
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(i, toPixel(0, 0).x + 5, py); // Label Y
+                }
+            }
+
+            // --- Gambar Sumbu Utama ---
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#4b5563';
+            
+            // Sumbu X
+            const originY = toPixel(0,0).y;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.stroke();
+            
+            // Sumbu Y
+            const originX = toPixel(0,0).x;
+            ctx.beginPath();
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+
+            // Label O (0,0)
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText('0', originX - 12, originY + 12);
+            ctx.fillText('X', width - 15, originY - 10);
+            ctx.fillText('Y', originX + 10, 15);
+
+            // --- Plot Titik A dan B ---
+            const pA = toPixel(x1, y1);
+            const pB = toPixel(x2, y2);
+            const pC = toPixel(x2, y1); // Titik siku-siku perbantuan (bisa x2,y1 atau x1,y2)
+
+            // Gambar Garis Bantuan (Segitiga Siku-siku)
+            ctx.beginPath();
+            ctx.setLineDash([5, 5]); // Garis putus-putus
+            ctx.strokeStyle = '#15803d'; // islamicGreen-700
+            ctx.lineWidth = 2;
+            
+            // Garis Alas
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pC.x, pC.y);
+            // Garis Tinggi
+            ctx.lineTo(pB.x, pB.y);
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset line dash
+
+            // Simbol siku-siku
+            if (x1 !== x2 && y1 !== y2) {
+                const size = 10;
+                const dirX = x1 < x2 ? -1 : 1;
+                const dirY = y2 > y1 ? -1 : 1;
+                ctx.beginPath();
+                ctx.strokeStyle = '#15803d';
+                ctx.lineWidth = 1.5;
+                ctx.moveTo(pC.x + (size * dirX), pC.y);
+                ctx.lineTo(pC.x + (size * dirX), pC.y + (size * dirY));
+                ctx.lineTo(pC.x, pC.y + (size * dirY));
+                ctx.stroke();
+            }
+
+            // Gambar Garis Jarak (Sisi Miring)
+            ctx.beginPath();
+            ctx.strokeStyle = '#f59e0b'; // elegantGold-500
+            ctx.lineWidth = 3;
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pB.x, pB.y);
+            ctx.stroke();
+
+            // Gambar Titik C (Bantuan - Opsional, kecil saja)
+            if (x1 !== x2 && y1 !== y2) {
+                ctx.beginPath();
+                ctx.arc(pC.x, pC.y, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#86efac';
+                ctx.fill();
+            }
+
+            // Gambar Titik A
+            ctx.beginPath();
+            ctx.arc(pA.x, pA.y, 7, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ef4444'; // Merah
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#ef4444';
+            ctx.font = 'bold 14px Arial';
+            // Posisikan label agak menjauh dari titik
+            ctx.fillText('A', pA.x - 20, pA.y - 10);
+
+            // Gambar Titik B
+            ctx.beginPath();
+            ctx.arc(pB.x, pB.y, 7, 0, 2 * Math.PI);
+            ctx.fillStyle = '#3b82f6'; // Biru
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#3b82f6';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('B', pB.x + 10, pB.y - 10);
+
+            // --- Update Panel Kalkulasi ---
+            const alas = Math.abs(x2 - x1);
+            const tinggi = Math.abs(y2 - y1);
+            const jarakKuadrat = (alas * alas) + (tinggi * tinggi);
+            const jarak = Math.sqrt(jarakKuadrat);
+
+            // Update UI teks perhitungan
+            const calcHtml = `
+                <div>Alas (a) = |x₂ - x₁| = |${x2} - ${x1}| = ${alas}</div>
+                <div>Tinggi (b) = |y₂ - y₁| = |${y2} - ${y1}| = ${tinggi}</div>
+                <div class="mt-2 text-islamicGreen-700 font-bold">AB² = a² + b²</div>
+                <div>AB² = ${alas}² + ${tinggi}²</div>
+                <div>AB² = ${alas*alas} + ${tinggi*tinggi} = ${jarakKuadrat}</div>
+                <div>AB = &radic;${jarakKuadrat}</div>
+            `;
+            document.getElementById('calcProses').innerHTML = calcHtml;
+            
+            // Format angka, jika desimal batasi 2 angka di belakang koma
+            let displayResult = Number.isInteger(jarak) ? jarak : jarak.toFixed(2);
+            document.getElementById('calcResult').innerHTML = displayResult;
+        }
+
+        // Panggil untuk inisialisasi awal
+        function updateSim() {
+            drawSimulation();
+        }
+
+        // Tangani event resize browser agar kanvas responsif
+        window.addEventListener('resize', () => {
+            // Hanya resize jika section interaktif sedang terlihat (tidak hidden)
+            if(!document.getElementById('interaktif').classList.contains('hidden-section')){
+                resizeCanvas();
+            }
+        });
+
+        // ==========================================
+        // 3. LOGIKA MESIN KUIS INTERAKTIF
+        // ==========================================
+        const bankSoal = [
+            {
+                pertanyaan: "Sebuah perahu menyeberangi Danau Limboto. Perahu berangkat dari titik kordinat A(3, 2) dan berlabuh di titik B(7, 5). Dengan menganggap satu satuan koordinat adalah 1 km, berapakah jarak garis lurus yang ditempuh perahu tersebut?",
+                opsi: ["3 km", "4 km", "5 km", "7 km"],
+                jawabanBenar: 2, // Indeks "5 km"
+                pembahasan: "x1=3, y1=2; x2=7, y2=5.\nAlas = |7-3| = 4\nTinggi = |5-2| = 3\nJarak² = 4² + 3² = 16 + 9 = 25\nJarak = √25 = 5 km."
+            },
+            {
+                pertanyaan: "Pada peta, rumah Ali berada di koordinat (-2, 4) dan madrasah berada di koordinat (4, -4). Panjang jalan lurus terpendek dari rumah Ali ke madrasah adalah ... satuan.",
+                opsi: ["10", "12", "14", "100"],
+                jawabanBenar: 0, // "10"
+                pembahasan: "x1=-2, y1=4; x2=4, y2=-4.\nAlas = |4 - (-2)| = 6\nTinggi = |-4 - 4| = |-8| = 8\nJarak² = 6² + 8² = 36 + 64 = 100\nJarak = √100 = 10 satuan."
+            },
+            {
+                pertanyaan: "Dalam konsep Teorema Pythagoras untuk mencari jarak titik A dan B, panjang sisi mendatar (alas segitiga) diperoleh dari perhitungan...",
+                opsi: ["Menjumlahkan nilai x dari kedua titik (x1 + x2)", "Mencari selisih nilai y dari kedua titik (y2 - y1)", "Mencari selisih nilai x dari kedua titik (x2 - x1)", "Mengalikan x1 dan x2"],
+                jawabanBenar: 2, // "Mencari selisih..."
+                pembahasan: "Sisi mendatar sejajar dengan sumbu X, sehingga panjangnya adalah selisih atau jarak antara koordinat X dari kedua titik, yaitu (x2 - x1) atau sebaliknya."
+            },
+            {
+                pertanyaan: "Jika jarak antara titik P(1, 2) dan Q(1, a) adalah 7 satuan, dan a > 0, maka nilai a adalah...",
+                opsi: ["5", "7", "9", "12"],
+                jawabanBenar: 2, // "9"
+                pembahasan: "Karena koordinat X sama (1), posisi titik berada pada garis lurus vertikal sejajar sumbu Y.\nJarak = |y2 - y1| = |a - 2| = 7\nKarena a > 0, maka a - 2 = 7 -> a = 9."
+            },
+            {
+                pertanyaan: "Pasangan titik berikut ini yang memiliki jarak tepat 13 satuan adalah...",
+                opsi: ["(0,0) dan (6,7)", "(2,3) dan (7,15)", "(-1,2) dan (3,5)", "(1,1) dan (2,14)"],
+                jawabanBenar: 1, // (2,3) dan (7,15)
+                pembahasan: "Cek opsi B: (2,3) ke (7,15).\nAlas = |7-2| = 5\nTinggi = |15-3| = 12\nJarak = √(5² + 12²) = √(25 + 144) = √169 = 13 (Benar, ini adalah Tripel Pythagoras 5,12,13)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let isAnswered = false;
+
+        // --- VARIABEL DATABASE ---
+        // URL Web App Google Apps Script yang sudah di-deploy
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyN1HyjYWUc2uj-nVffZTGHsindhozUnO5N2_9JjIjeRrkxJq8JJq2SwHeIVpP0aTKM/exec"; 
+        
+        let namaSiswa = "";
+        let kelasSiswa = "";
+        let rekapanJawaban = []; // Menyimpan detail tiap jawaban
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            rekapanJawaban = [];
+            
+            document.getElementById('resultContainer').classList.add('hidden');
+            
+            // Tampilkan form identitas, sembunyikan kuis
+            document.getElementById('identitasContainer').classList.remove('hidden');
+            document.getElementById('quizContainer').classList.add('hidden');
+            
+            // Reset pesan database
+            document.getElementById('loadingStatus').classList.add('hidden');
+            document.getElementById('successStatus').classList.add('hidden');
+            document.getElementById('errorStatus').classList.add('hidden');
+            
+            updateScoreDisplay();
+        }
+
+        function mulaiKuisDenganIdentitas() {
+            const nama = document.getElementById('inputNama').value.trim();
+            const kelas = document.getElementById('inputKelas').value;
+            
+            if (!nama || !kelas) {
+                document.getElementById('identitasError').classList.remove('hidden');
+                return;
+            }
+            
+            namaSiswa = nama;
+            kelasSiswa = kelas;
+            
+            document.getElementById('identitasError').classList.add('hidden');
+            
+            // Lanjut ke Kuis
+            document.getElementById('identitasContainer').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswered = false;
+            const q = bankSoal[currentQuestion];
+            
+            // Update Progress
+            document.getElementById('quizProgress').textContent = `Soal ${currentQuestion + 1} dari ${bankSoal.length}`;
+            
+            // Set Pertanyaan
+            document.getElementById('questionText').textContent = q.pertanyaan;
+
+            // Render Opsi
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = ''; // Clear old options
+            
+            q.opsi.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-islamicGreen-400 hover:bg-islamicGreen-50 transition-colors bg-white font-medium text-gray-700';
+                btn.innerHTML = `<span class="inline-block w-8 h-8 rounded-full bg-gray-100 text-center leading-8 mr-3 font-bold text-gray-500">${String.fromCharCode(65 + index)}</span> ${opt}`;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Hide Feedback
+            const feedbackBox = document.getElementById('feedbackBox');
+            feedbackBox.classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if (isAnswered) return; // Mencegah klik multiple
+            isAnswered = true;
+
+            const q = bankSoal[currentQuestion];
+            const isCorrect = (selectedIndex === q.jawabanBenar);
+            const buttons = document.getElementById('optionsContainer').children;
+
+            // --- Perekaman Jawaban untuk Database ---
+            rekapanJawaban.push({
+                pertanyaan: q.pertanyaan,
+                jawaban: q.opsi[selectedIndex],
+                status: isCorrect ? 'Benar' : 'Salah'
+            });
+
+            // Disabled all buttons
+            for (let btn of buttons) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+                btn.classList.remove('hover:border-islamicGreen-400', 'hover:bg-islamicGreen-50');
+            }
+
+            // Styling feedback pada tombol
+            if (isCorrect) {
+                score += 20; // 5 soal x 20 = 100 max
+                updateScoreDisplay();
+                btnElement.classList.remove('border-gray-200');
+                btnElement.classList.add('border-green-500', 'bg-green-50');
+                showFeedback(true, q.pembahasan);
+            } else {
+                btnElement.classList.remove('border-gray-200');
+                btnElement.classList.add('border-red-500', 'bg-red-50');
+                // Highlight tombol yang benar
+                buttons[q.jawabanBenar].classList.remove('border-gray-200');
+                buttons[q.jawabanBenar].classList.add('border-green-500', 'bg-green-50', 'opacity-100');
+                showFeedback(false, q.pembahasan);
+            }
+        }
+
+        function showFeedback(isCorrect, pembahasanText) {
+            const fbBox = document.getElementById('feedbackBox');
+            const fbTitle = document.getElementById('feedbackTitle');
+            const fbText = document.getElementById('feedbackText');
+            const fbIcon = document.getElementById('feedbackIcon');
+            const fbPembahasan = document.getElementById('pembahasanText');
+            const nextBtn = document.getElementById('nextBtn');
+
+            fbBox.classList.remove('hidden', 'bg-green-100', 'border-green-300', 'bg-red-100', 'border-red-300');
+            fbBox.classList.add('border-2');
+
+            if (isCorrect) {
+                fbBox.classList.add('bg-green-50', 'border-green-300');
+                fbTitle.textContent = "Tepat Sekali!";
+                fbTitle.className = "font-bold mb-1 text-green-800";
+                fbText.textContent = "Alhamdulillah, analisismu mengenai jarak dua titik sudah benar.";
+                fbIcon.innerHTML = `<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            } else {
+                fbBox.classList.add('bg-red-50', 'border-red-300');
+                fbTitle.textContent = "Kurang Tepat, Mari Pelajari Lagi!";
+                fbTitle.className = "font-bold mb-1 text-red-800";
+                fbText.textContent = "Tidak apa-apa. Mari perhatikan langkah penyelesaian yang benar di bawah ini.";
+                fbIcon.innerHTML = `<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            }
+
+            // Ganti newline dengan tag <br> untuk HTML
+            fbPembahasan.innerHTML = "<strong>Pembahasan:</strong><br>" + pembahasanText.replace(/\n/g, '<br>');
+            
+            // Munculkan tombol next/selesai
+            nextBtn.classList.remove('hidden');
+            if (currentQuestion === bankSoal.length - 1) {
+                nextBtn.textContent = "Selesai & Lihat Nilai";
+            } else {
+                nextBtn.textContent = "Soal Selanjutnya";
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < bankSoal.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('quizScoreDisplay').textContent = score;
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            
+            const finalScore = document.getElementById('finalScoreText');
+            const finalMsg = document.getElementById('finalMessage');
+            
+            finalScore.textContent = score;
+            
+            if (score >= 80) {
+                finalMsg.textContent = "MasyaAllah, Sangat Memuaskan! Kamu sudah menguasai konsep ini dengan baik.";
+                finalMsg.className = "text-sm font-medium text-green-600 mt-2";
+            } else if (score >= 60) {
+                finalMsg.textContent = "Cukup Baik! Sedikit lagi latihan, kamu pasti bisa mendapatkan nilai sempurna.";
+                finalMsg.className = "text-sm font-medium text-elegantGold-700 mt-2";
+            } else {
+                finalMsg.textContent = "Tetap Semangat! Jangan menyerah, baca kembali materi eksplorasi dan coba lagi.";
+                finalMsg.className = "text-sm font-medium text-red-500 mt-2";
+            }
+            
+            // --- KIRIM DATA KE DATABASE (GOOGLE SHEETS) ---
+            kirimKeDatabase();
+        }
+
+        function kirimKeDatabase() {
+            if (!GAS_URL) {
+                console.warn("URL Database tidak diisi. Melewati proses sinkronisasi ke Spreadsheet.");
+                // Bisa juga menampilkan pesan informatif di UI bahwa data tidak disimpan ke DB
+                return;
+            }
+
+            const loading = document.getElementById('loadingStatus');
+            const success = document.getElementById('successStatus');
+            const errorStat = document.getElementById('errorStatus');
+            
+            loading.classList.remove('hidden');
+            success.classList.add('hidden');
+            errorStat.classList.add('hidden');
+
+            const jmlBenar = score / 20; // 5 soal dengan total nilai 100
+            const jmlSalah = bankSoal.length - jmlBenar;
+
+            const payload = {
+                nama: namaSiswa,
+                kelas: kelasSiswa,
+                skor: score,
+                benar: jmlBenar,
+                salah: jmlSalah,
+                detailJawaban: rekapanJawaban
+            };
+
+            // Menggunakan method fetch POST (memanfaatkan text/plain untuk menghindari CORS Google)
+            fetch(GAS_URL, {
+                method: 'POST',
+                headers: {
+                    // Pakai text/plain agar tidak memicu pre-flight request (OPTIONS) yang sering dicekal Google
+                    'Content-Type': 'text/plain;charset=utf-8', 
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.add('hidden');
+                if(data.status === "success") {
+                    success.classList.remove('hidden');
+                } else {
+                    errorStat.classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                loading.classList.add('hidden');
+                errorStat.classList.remove('hidden');
+                console.error('Error saat menyimpan ke Sheets:', error);
+            });
+        }
+
+        // ==========================================
+        // INISIALISASI SAAT HALAMAN DIMUAT
+        // ==========================================
+        window.onload = function() {
+            // Tampilkan halaman cover sebagai tampilan awal
+            showSection('cover');
+            
+            // Inisialisasi awal kalkulasi (meski di background)
+            drawSimulation();
+            
+            // Siapkan Kuis
+            startQuiz();
+            
+            // Sembunyikan div kuis agar beranda/cover yg terlihat
+            document.getElementById('kuis').classList.add('hidden-section');
+        }
+    </script>
+</body>
+</html>
